@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { MessageSquare, Code2, Github, Sparkles, Activity } from "lucide-react"
+import { MessageSquare, Code2, Github, Sparkles, Activity, UserRound } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -35,6 +35,12 @@ const navItems = [
     href: "/mcp",
     icon: Github,
     description: "Live MCP tools",
+  },
+  {
+    title: "GitHub Account",
+    href: "/account",
+    icon: UserRound,
+    description: "Your authenticated user",
   },
 ]
 
@@ -69,12 +75,26 @@ export function DashboardSidebar() {
                       isActive={isActive}
                       tooltip={item.title}
                       className={cn(
-                        "h-11 transition-colors",
-                        isActive && "bg-sidebar-accent text-sidebar-accent-foreground",
+                        "relative h-11 overflow-hidden transition-all duration-200",
+                        isActive
+                          ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                          : "text-sidebar-foreground/80 hover:text-sidebar-foreground",
                       )}
                     >
                       <Link href={item.href}>
-                        <item.icon className="size-4 shrink-0" />
+                        <span
+                          className={cn(
+                            "absolute inset-y-1.5 left-0 w-0.5 rounded-r-full bg-primary transition-all duration-200",
+                            isActive ? "opacity-100" : "opacity-0",
+                          )}
+                          aria-hidden
+                        />
+                        <item.icon
+                          className={cn(
+                            "size-4 shrink-0 transition-colors",
+                            isActive ? "text-primary" : "text-muted-foreground",
+                          )}
+                        />
                         <div className="flex flex-col leading-tight">
                           <span className="text-sm font-medium">{item.title}</span>
                           <span className="text-xs text-muted-foreground group-data-[collapsible=icon]:hidden">

@@ -126,7 +126,7 @@ export function ChatInterface() {
           {messages.length === 0 ? (
             <EmptyState
               onPick={(prompt) => {
-                setInput(prompt)
+                sendMessage({ text: prompt })
               }}
             />
           ) : (
@@ -227,14 +227,19 @@ function EmptyState({ onPick }: { onPick: (prompt: string) => void }) {
         {EXAMPLE_PROMPTS.map((p) => (
           <button
             key={p.title}
+            type="button"
             onClick={() => onPick(p.prompt)}
-            className="group rounded-lg border border-border bg-card p-4 text-left transition-all hover:border-primary/40 hover:bg-accent/40"
+            className="group flex flex-col gap-1 rounded-xl border border-border bg-card p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:bg-accent/40 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
           >
-            <p className="text-sm font-medium">{p.title}</p>
-            <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{p.prompt}</p>
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-sm font-medium">{p.title}</p>
+              <Send className="size-3.5 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
+            </div>
+            <p className="line-clamp-2 text-xs text-muted-foreground">{p.prompt}</p>
           </button>
         ))}
       </div>
+      <p className="mt-4 text-[11px] text-muted-foreground">Click a prompt to send it instantly.</p>
     </div>
   )
 }
@@ -250,9 +255,14 @@ function MessageBubble({
 }) {
   const isUser = role === "user"
   return (
-    <div className={cn("flex gap-3", isUser ? "justify-end" : "justify-start")}>
+    <div
+      className={cn(
+        "flex gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300",
+        isUser ? "justify-end" : "justify-start",
+      )}
+    >
       {!isUser && (
-        <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+        <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/20">
           <Bot className="size-4" />
         </div>
       )}
@@ -260,24 +270,40 @@ function MessageBubble({
         className={cn(
           "max-w-[85%] rounded-2xl px-4 py-3 text-sm shadow-sm",
           isUser
-            ? "bg-primary text-primary-foreground"
-            : "border border-border bg-card text-card-foreground",
+            ? "rounded-tr-md bg-primary text-primary-foreground"
+            : "rounded-tl-md border border-border bg-card text-card-foreground",
         )}
       >
         {loading ? (
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <Spinner className="size-3" />
-            <span className="text-xs">Thinking…</span>
-          </div>
+          <TypingDots />
         ) : (
           <div className="space-y-1">{formatMessage(content)}</div>
         )}
       </div>
       {isUser && (
-        <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
+        <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-secondary text-secondary-foreground ring-1 ring-border">
           <User className="size-4" />
         </div>
       )}
+    </div>
+  )
+}
+
+function TypingDots() {
+  return (
+    <div className="flex items-center gap-1.5 py-0.5" aria-label="Assistant is typing">
+      <span
+        className="size-1.5 animate-bounce rounded-full bg-muted-foreground/70"
+        style={{ animationDelay: "0ms" }}
+      />
+      <span
+        className="size-1.5 animate-bounce rounded-full bg-muted-foreground/70"
+        style={{ animationDelay: "150ms" }}
+      />
+      <span
+        className="size-1.5 animate-bounce rounded-full bg-muted-foreground/70"
+        style={{ animationDelay: "300ms" }}
+      />
     </div>
   )
 }

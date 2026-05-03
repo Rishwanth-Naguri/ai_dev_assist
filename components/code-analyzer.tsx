@@ -189,7 +189,7 @@ function AnalysisResult({
   copied: boolean
 }) {
   return (
-    <Card className="border-border bg-card">
+    <Card className="border-border bg-card animate-in fade-in slide-in-from-bottom-2 duration-300">
       <CardHeader className="border-b border-border pb-4">
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm font-medium">Analysis</CardTitle>

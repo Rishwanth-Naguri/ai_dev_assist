@@ -15,6 +15,9 @@ import {
   Search,
   AlertTriangle,
   GitCommit,
+  Scale,
+  Clock,
+  Code2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -254,7 +257,7 @@ function ConnectionBadge({ tools, loading }: { tools: ToolsResponse | undefined;
 function RepoCard({ result }: { result: RepoResponse }) {
   const { data, meta } = result
   return (
-    <Card className="overflow-hidden border-border bg-card">
+    <Card className="overflow-hidden border-border bg-card animate-in fade-in slide-in-from-bottom-2 duration-300">
       <CardHeader className="border-b border-border bg-muted/20">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="space-y-1">
@@ -294,12 +297,31 @@ function RepoCard({ result }: { result: RepoResponse }) {
         )}
       </CardHeader>
 
-      <CardContent className="grid grid-cols-2 gap-px bg-border p-0 sm:grid-cols-4">
+      <CardContent className="grid grid-cols-2 gap-px bg-border p-0 sm:grid-cols-3 lg:grid-cols-6">
         <Stat icon={Star} label="Stars" value={data.stars.toLocaleString()} />
         <Stat icon={GitFork} label="Forks" value={data.forks.toLocaleString()} />
         <Stat icon={Eye} label="Watchers" value={data.watchers.toLocaleString()} />
         <Stat icon={CircleDot} label="Open issues" value={data.openIssues.toLocaleString()} />
+        <Stat icon={Code2} label="Language" value={data.language || "—"} mono={!!data.language} />
+        <Stat
+          icon={Scale}
+          label="License"
+          value={data.license || "—"}
+        />
       </CardContent>
+      {data.pushedAt && (
+        <div className="flex items-center gap-2 border-t border-border bg-muted/10 px-5 py-2 text-[11px] text-muted-foreground">
+          <Clock className="size-3" />
+          Last push{" "}
+          {new Date(data.pushedAt).toLocaleString(undefined, {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </div>
+      )}
 
       <Separator />
 
@@ -383,18 +405,28 @@ function Stat({
   icon: Icon,
   label,
   value,
+  mono = true,
 }: {
   icon: typeof Star
   label: string
   value: string
+  mono?: boolean
 }) {
   return (
-    <div className="flex flex-col gap-1 bg-card p-4">
+    <div className="flex flex-col gap-1 bg-card p-4 transition-colors hover:bg-muted/20">
       <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-muted-foreground">
         <Icon className="size-3" />
         {label}
       </div>
-      <span className="font-mono text-lg font-semibold tabular-nums">{value}</span>
+      <span
+        className={cn(
+          "truncate text-lg font-semibold tabular-nums",
+          mono ? "font-mono" : "font-sans",
+        )}
+        title={value}
+      >
+        {value}
+      </span>
     </div>
   )
 }
