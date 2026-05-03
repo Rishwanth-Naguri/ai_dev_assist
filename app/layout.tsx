@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#0a0a0b",
+  themeColor: "#07060e",
   width: "device-width",
   initialScale: 1,
 }
@@ -38,8 +38,16 @@ export default function RootLayout({
     <html lang="en" className={`dark ${inter.variable} ${geistMono.variable}`}>
       <body className="font-sans antialiased text-foreground">
         <AnimatedBackground />
-        <div className="relative min-h-svh">{children}</div>
-        <Toaster richColors position="top-right" />
+        <div className="relative isolate min-h-svh">{children}</div>
+        <Toaster
+          richColors
+          position="top-right"
+          toastOptions={{
+            classNames: {
+              toast: "border border-white/10 bg-card/80 backdrop-blur-md text-foreground",
+            },
+          }}
+        />
         {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>

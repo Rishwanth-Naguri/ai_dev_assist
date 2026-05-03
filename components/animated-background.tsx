@@ -1,43 +1,75 @@
-"use client"
-
-/**
- * Subtle animated background with layered radial gradients.
- * Dark blue, purple, and black tones with slow CSS keyframe movement.
- * Minimal and non-distracting — sits behind all content.
- */
 export function AnimatedBackground() {
   return (
     <div
+      aria-hidden
       className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
-      aria-hidden="true"
     >
-      {/* Base gradient wash */}
+      {/* Layered radial base — deep navy/indigo wash so it never reads as flat black. */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `
+            radial-gradient(120% 80% at 12% 8%, rgba(76, 29, 149, 0.35), transparent 60%),
+            radial-gradient(110% 90% at 88% 20%, rgba(30, 64, 175, 0.32), transparent 55%),
+            radial-gradient(90% 70% at 50% 100%, rgba(67, 56, 202, 0.28), transparent 60%),
+            linear-gradient(180deg, #0a0612 0%, #07060e 60%, #050409 100%)
+          `,
+        }}
+      />
+
+      {/* Slow-panning gradient sheen on top of the base. */}
+      <div
+        className="absolute inset-0 opacity-60 animate-gradient-pan"
+        style={{
+          background:
+            "linear-gradient(120deg, transparent 0%, rgba(99, 102, 241, 0.08) 30%, rgba(139, 92, 246, 0.10) 50%, rgba(59, 130, 246, 0.08) 70%, transparent 100%)",
+          backgroundSize: "200% 200%",
+        }}
+      />
+
+      {/* Floating blobs — purple (top-left), blue (bottom-right), violet (center). */}
+      <div
+        className="absolute -top-32 -left-24 size-[36rem] rounded-full opacity-50 mix-blend-screen blur-3xl animate-blob-1"
+        style={{
+          background:
+            "radial-gradient(circle at 30% 30%, rgba(168, 85, 247, 0.55), rgba(168, 85, 247, 0) 65%)",
+        }}
+      />
+      <div
+        className="absolute -bottom-40 -right-24 size-[40rem] rounded-full opacity-50 mix-blend-screen blur-3xl animate-blob-2"
+        style={{
+          background:
+            "radial-gradient(circle at 60% 40%, rgba(59, 130, 246, 0.55), rgba(59, 130, 246, 0) 65%)",
+        }}
+      />
+      <div
+        className="absolute top-1/3 left-1/2 size-[28rem] -translate-x-1/2 rounded-full opacity-35 mix-blend-screen blur-3xl animate-blob-3"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(139, 92, 246, 0.45), rgba(139, 92, 246, 0) 70%)",
+        }}
+      />
+
+      {/* Faint grid for depth — masked toward the top so it doesn't fight content. */}
+      <div
+        className="absolute inset-0 opacity-[0.04]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)",
+          backgroundSize: "56px 56px",
+          maskImage:
+            "radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 80%)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 80%)",
+        }}
+      />
+
+      {/* Vignette to anchor the corners. */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(88, 28, 135, 0.15), transparent 70%), " +
-            "radial-gradient(ellipse 60% 50% at 100% 50%, rgba(30, 64, 175, 0.1), transparent 60%), " +
-            "radial-gradient(ellipse 60% 50% at 0% 80%, rgba(88, 28, 135, 0.08), transparent 60%), " +
-            "#0a0a0b",
-        }}
-      />
-
-      {/* Slow-moving gradient layer */}
-      <div
-        className="absolute inset-0 animate-bg-drift"
-        style={{
-          background:
-            "radial-gradient(circle 600px at 30% 20%, rgba(99, 102, 241, 0.06), transparent 50%), " +
-            "radial-gradient(circle 500px at 70% 80%, rgba(139, 92, 246, 0.05), transparent 50%)",
-        }}
-      />
-
-      {/* Subtle noise texture for depth */}
-      <div
-        className="absolute inset-0 opacity-[0.015]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+            "radial-gradient(ellipse 100% 70% at 50% 50%, transparent 50%, rgba(0,0,0,0.55) 100%)",
         }}
       />
     </div>
