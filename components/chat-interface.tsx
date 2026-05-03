@@ -3,10 +3,9 @@
 import { useState, useRef, useEffect } from "react"
 import { useChat } from "@ai-sdk/react"
 import { DefaultChatTransport, type UIMessage } from "ai"
-import { Send, Sparkles, User, Bot, ArrowDown, RotateCcw } from "lucide-react"
+import { Send, Sparkles, User, Bot, ArrowDown, RotateCcw, AlertTriangle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { Card } from "@/components/ui/card"
 import { Spinner } from "@/components/ui/spinner"
 import { cn } from "@/lib/utils"
 
@@ -38,7 +37,6 @@ function getMessageText(msg: UIMessage): string {
 }
 
 function formatMessage(text: string) {
-  // Split by code blocks
   const parts = text.split(/(```[\s\S]*?```)/g)
   return parts.map((part, i) => {
     if (part.startsWith("```")) {
@@ -48,15 +46,18 @@ function formatMessage(text: string) {
         return (
           <pre
             key={i}
-            className="my-3 overflow-x-auto rounded-md border border-border bg-muted/40 p-3 font-mono text-xs leading-relaxed"
+            className="my-3 overflow-x-auto rounded-md border border-border bg-background/60 p-3 font-mono text-[12px] leading-relaxed"
           >
-            {lang ? <div className="mb-2 text-[10px] uppercase tracking-wider text-muted-foreground">{lang}</div> : null}
+            {lang && (
+              <div className="mb-2 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                {lang}
+              </div>
+            )}
             <code>{code.trim()}</code>
           </pre>
         )
       }
     }
-    // Render inline code and paragraphs
     const inlineParts = part.split(/(`[^`]+`)/g)
     return (
       <span key={i} className="whitespace-pre-wrap leading-relaxed">
@@ -64,7 +65,7 @@ function formatMessage(text: string) {
           ip.startsWith("`") && ip.endsWith("`") ? (
             <code
               key={j}
-              className="rounded bg-muted px-1.5 py-0.5 font-mono text-[0.85em] text-foreground"
+              className="rounded border border-border bg-background/60 px-1 py-0.5 font-mono text-[0.85em]"
             >
               {ip.slice(1, -1)}
             </code>
@@ -116,37 +117,26 @@ export function ChatInterface() {
   }
 
   return (
-    <div className="flex h-[calc(100vh-3.5rem)] flex-col">
-      <div
-        ref={scrollRef}
-        onScroll={onScroll}
-        className="relative flex-1 overflow-y-auto px-4 py-6 md:px-8"
-      >
+    <div className="flex h-[calc(100vh-3rem)] flex-col">
+      <div ref={scrollRef} onScroll={onScroll} className="relative flex-1 overflow-y-auto px-4 py-6 md:px-8">
         <div className="mx-auto max-w-3xl">
           {messages.length === 0 ? (
-            <EmptyState
-              onPick={(prompt) => {
-                sendMessage({ text: prompt })
-              }}
-            />
+            <EmptyState onPick={(prompt) => sendMessage({ text: prompt })} />
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-5">
               {messages.map((message) => (
-                <MessageBubble
-                  key={message.id}
-                  role={message.role}
-                  content={getMessageText(message)}
-                />
+                <MessageBubble key={message.id} role={message.role} content={getMessageText(message)} />
               ))}
-              {status === "submitted" && (
-                <MessageBubble role="assistant" content="" loading />
+              {status === "submitted" && <MessageBubble role="assistant" content="" loading />}
+              {error && (
+                <div className="flex items-start gap-2.5 rounded-md border border-destructive/30 bg-destructive/5 p-3.5 text-sm">
+                  <AlertTriangle className="mt-0.5 size-4 shrink-0 text-destructive" />
+                  <div className="space-y-1">
+                    <p className="font-medium text-foreground">Something went wrong</p>
+                    <p className="text-xs text-muted-foreground">{error.message}</p>
+                  </div>
+                </div>
               )}
-              {error ? (
-                <Card className="border-destructive/40 bg-destructive/10 p-4 text-sm text-destructive-foreground">
-                  <p className="font-medium">Something went wrong</p>
-                  <p className="text-xs opacity-80">{error.message}</p>
-                </Card>
-              ) : null}
             </div>
           )}
         </div>
@@ -155,25 +145,25 @@ export function ChatInterface() {
           <Button
             size="icon"
             variant="secondary"
-            className="absolute bottom-4 right-6 size-9 rounded-full shadow-lg"
+            className="absolute bottom-4 right-6 size-8 rounded-full border border-border bg-card"
             onClick={() => scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" })}
           >
-            <ArrowDown className="size-4" />
+            <ArrowDown className="size-3.5" />
             <span className="sr-only">Scroll to bottom</span>
           </Button>
         )}
       </div>
 
-      <div className="border-t border-border bg-background/80 backdrop-blur">
+      <div className="border-t border-border bg-background">
         <form onSubmit={handleSubmit} className="mx-auto max-w-3xl px-4 py-4 md:px-8">
-          <div className="relative flex items-end gap-2 rounded-xl border border-border bg-card p-2 shadow-sm transition-colors focus-within:border-primary/50 focus-within:ring-2 focus-within:ring-primary/20">
+          <div className="flex items-end gap-2 rounded-lg border border-border bg-card p-2 transition-colors focus-within:border-primary/50 focus-within:ring-2 focus-within:ring-ring/30">
             <Textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Ask about React hooks, Mongo queries, Next.js routing…"
+              placeholder="Ask about React, Mongo, Next.js…"
               rows={1}
-              className="min-h-[44px] resize-none border-0 bg-transparent px-2 py-2 text-sm shadow-none focus-visible:ring-0"
+              className="min-h-[40px] max-h-48 resize-none border-0 bg-transparent px-2 py-1.5 text-sm shadow-none focus-visible:ring-0"
               disabled={isLoading}
             />
             <div className="flex items-center gap-1">
@@ -182,7 +172,7 @@ export function ChatInterface() {
                   type="button"
                   size="icon"
                   variant="ghost"
-                  className="size-9"
+                  className="size-8"
                   onClick={() => setMessages([])}
                   title="Clear chat"
                 >
@@ -190,18 +180,13 @@ export function ChatInterface() {
                   <span className="sr-only">Clear chat</span>
                 </Button>
               )}
-              <Button
-                type="submit"
-                size="icon"
-                disabled={!input.trim() || isLoading}
-                className="size-9 rounded-lg"
-              >
-                {isLoading ? <Spinner className="size-4" /> : <Send className="size-4" />}
+              <Button type="submit" size="icon" disabled={!input.trim() || isLoading} className="size-8">
+                {isLoading ? <Spinner className="size-3.5" /> : <Send className="size-3.5" />}
                 <span className="sr-only">Send message</span>
               </Button>
             </div>
           </div>
-          <p className="mt-2 px-2 text-[11px] text-muted-foreground">
+          <p className="mt-2 px-1 text-[10px] text-muted-foreground">
             Shift + Enter for newline · Streaming via Vercel AI SDK
           </p>
         </form>
@@ -213,33 +198,27 @@ export function ChatInterface() {
 function EmptyState({ onPick }: { onPick: (prompt: string) => void }) {
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
-      <div className="mb-4 flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-        <Sparkles className="size-6" />
+      <div className="mb-4 flex size-10 items-center justify-center rounded-md border border-border bg-card text-foreground">
+        <Sparkles className="size-4" />
       </div>
-      <h2 className="text-2xl font-semibold tracking-tight text-balance">
-        How can I help with your code today?
-      </h2>
-      <p className="mt-2 max-w-md text-sm text-muted-foreground text-pretty">
+      <h2 className="text-xl font-semibold tracking-tight">How can I help with your code today?</h2>
+      <p className="mt-1.5 max-w-md text-sm text-muted-foreground">
         Ask about React, Node, MongoDB, Express, Next.js, or paste an error and I&apos;ll help you debug it.
       </p>
 
-      <div className="mt-8 grid w-full max-w-2xl grid-cols-1 gap-3 sm:grid-cols-2">
+      <div className="mt-8 grid w-full max-w-2xl grid-cols-1 gap-2.5 sm:grid-cols-2">
         {EXAMPLE_PROMPTS.map((p) => (
           <button
             key={p.title}
             type="button"
             onClick={() => onPick(p.prompt)}
-            className="group flex flex-col gap-1 rounded-xl border border-border bg-card p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:bg-accent/40 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+            className="group flex flex-col gap-1 rounded-md border border-border bg-card p-3.5 text-left transition-colors hover:border-primary/40 hover:bg-accent"
           >
-            <div className="flex items-center justify-between gap-2">
-              <p className="text-sm font-medium">{p.title}</p>
-              <Send className="size-3.5 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
-            </div>
-            <p className="line-clamp-2 text-xs text-muted-foreground">{p.prompt}</p>
+            <p className="text-sm font-medium tracking-tight">{p.title}</p>
+            <p className="line-clamp-2 text-xs text-muted-foreground leading-relaxed">{p.prompt}</p>
           </button>
         ))}
       </div>
-      <p className="mt-4 text-[11px] text-muted-foreground">Click a prompt to send it instantly.</p>
     </div>
   )
 }
@@ -255,34 +234,25 @@ function MessageBubble({
 }) {
   const isUser = role === "user"
   return (
-    <div
-      className={cn(
-        "flex gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300",
-        isUser ? "justify-end" : "justify-start",
-      )}
-    >
+    <div className={cn("flex gap-2.5", isUser ? "justify-end" : "justify-start")}>
       {!isUser && (
-        <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/20">
-          <Bot className="size-4" />
+        <div className="flex size-7 shrink-0 items-center justify-center rounded-md border border-border bg-card text-foreground">
+          <Bot className="size-3.5" />
         </div>
       )}
       <div
         className={cn(
-          "max-w-[85%] rounded-2xl px-4 py-3 text-sm shadow-sm",
+          "max-w-[80%] rounded-lg px-3.5 py-2.5 text-sm",
           isUser
-            ? "rounded-tr-md bg-primary text-primary-foreground"
-            : "rounded-tl-md border border-border bg-card text-card-foreground",
+            ? "rounded-tr-sm border border-border bg-accent text-foreground"
+            : "rounded-tl-sm border border-border bg-card text-card-foreground",
         )}
       >
-        {loading ? (
-          <TypingDots />
-        ) : (
-          <div className="space-y-1">{formatMessage(content)}</div>
-        )}
+        {loading ? <TypingDots /> : <div className="space-y-1">{formatMessage(content)}</div>}
       </div>
       {isUser && (
-        <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-secondary text-secondary-foreground ring-1 ring-border">
-          <User className="size-4" />
+        <div className="flex size-7 shrink-0 items-center justify-center rounded-md border border-border bg-card text-foreground">
+          <User className="size-3.5" />
         </div>
       )}
     </div>
@@ -291,19 +261,10 @@ function MessageBubble({
 
 function TypingDots() {
   return (
-    <div className="flex items-center gap-1.5 py-0.5" aria-label="Assistant is typing">
-      <span
-        className="size-1.5 animate-bounce rounded-full bg-muted-foreground/70"
-        style={{ animationDelay: "0ms" }}
-      />
-      <span
-        className="size-1.5 animate-bounce rounded-full bg-muted-foreground/70"
-        style={{ animationDelay: "150ms" }}
-      />
-      <span
-        className="size-1.5 animate-bounce rounded-full bg-muted-foreground/70"
-        style={{ animationDelay: "300ms" }}
-      />
+    <div className="flex items-center gap-1.5 py-1" aria-label="Assistant is typing">
+      <span className="size-1.5 animate-bounce rounded-full bg-muted-foreground/70" style={{ animationDelay: "0ms" }} />
+      <span className="size-1.5 animate-bounce rounded-full bg-muted-foreground/70" style={{ animationDelay: "150ms" }} />
+      <span className="size-1.5 animate-bounce rounded-full bg-muted-foreground/70" style={{ animationDelay: "300ms" }} />
     </div>
   )
 }

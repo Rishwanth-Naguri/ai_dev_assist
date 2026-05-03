@@ -3,87 +3,92 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ----------------------------------------------------------------
+ * DevAssist design tokens — flat, minimal, Linear-grade.
+ * Background: deep dark.  Cards: a hair lighter.  Borders: subtle.
+ * Accent: blue -> purple, used sparingly for emphasis only.
+ * ---------------------------------------------------------------- */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  --background: #ffffff;
+  --foreground: #0a0a0b;
+  --card: #ffffff;
+  --card-foreground: #0a0a0b;
+  --popover: #ffffff;
+  --popover-foreground: #0a0a0b;
+  --primary: #6366f1;
+  --primary-foreground: #ffffff;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #0a0a0b;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --accent: #f4f4f5;
+  --accent-foreground: #0a0a0b;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: #6366f1;
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: #fafafa;
+  --sidebar-foreground: #0a0a0b;
+  --sidebar-primary: #6366f1;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f4f4f5;
+  --sidebar-accent-foreground: #0a0a0b;
+  --sidebar-border: #e4e4e7;
+  --sidebar-ring: #6366f1;
 }
 
 .dark {
-  /* Deep navy-violet base — never plain black anymore */
-  --background: oklch(0.135 0.03 280);
-  --foreground: oklch(0.97 0.01 260);
-  --card: oklch(0.2 0.025 280);
-  --card-foreground: oklch(0.97 0.01 260);
-  --popover: oklch(0.2 0.025 280);
-  --popover-foreground: oklch(0.97 0.01 260);
-  --primary: oklch(0.78 0.14 200);
-  --primary-foreground: oklch(0.16 0.03 280);
-  --secondary: oklch(0.26 0.03 280);
-  --secondary-foreground: oklch(0.97 0.01 260);
-  --muted: oklch(0.24 0.025 280);
-  --muted-foreground: oklch(0.7 0.02 270);
-  --accent: oklch(0.32 0.08 280);
-  --accent-foreground: oklch(0.97 0.01 260);
-  --destructive: oklch(0.6 0.22 20);
-  --destructive-foreground: oklch(0.97 0.01 260);
-  --border: oklch(0.3 0.04 280);
-  --input: oklch(0.24 0.025 280);
-  --ring: oklch(0.78 0.14 200);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.16 0.03 280);
-  --sidebar-foreground: oklch(0.97 0.01 260);
-  --sidebar-primary: oklch(0.78 0.14 200);
-  --sidebar-primary-foreground: oklch(0.16 0.03 280);
-  --sidebar-accent: oklch(0.24 0.03 280);
-  --sidebar-accent-foreground: oklch(0.97 0.01 260);
-  --sidebar-border: oklch(0.3 0.04 280);
-  --sidebar-ring: oklch(0.78 0.14 200);
+  /* Surface palette */
+  --background: #0a0a0b;
+  --foreground: #ececef;
+  --card: #111113;
+  --card-foreground: #ececef;
+  --popover: #111113;
+  --popover-foreground: #ececef;
 
-  /* Custom palette tokens for the redesigned background & accents */
-  --violet: oklch(0.55 0.24 295);
-  --indigo: oklch(0.5 0.22 265);
-  --azure: oklch(0.6 0.2 235);
-  --cyan: oklch(0.78 0.14 200);
+  /* Brand accent — indigo with a hint of violet.
+     The blue->purple gradient lives in the .accent-gradient utility. */
+  --primary: #818cf8;
+  --primary-foreground: #0a0a0b;
+
+  /* Quiet surfaces */
+  --secondary: #18181b;
+  --secondary-foreground: #ececef;
+  --muted: #141417;
+  --muted-foreground: #8b8b93;
+  --accent: #1c1c1f;
+  --accent-foreground: #ececef;
+
+  /* Status */
+  --destructive: #f87171;
+  --destructive-foreground: #0a0a0b;
+
+  /* Lines */
+  --border: #1c1c1f;
+  --input: #1c1c1f;
+  --ring: #6366f1;
+
+  --chart-1: #818cf8;
+  --chart-2: #34d399;
+  --chart-3: #f59e0b;
+  --chart-4: #f472b6;
+  --chart-5: #60a5fa;
+
+  --sidebar: #0a0a0b;
+  --sidebar-foreground: #ececef;
+  --sidebar-primary: #818cf8;
+  --sidebar-primary-foreground: #0a0a0b;
+  --sidebar-accent: #16161a;
+  --sidebar-accent-foreground: #ececef;
+  --sidebar-border: #1c1c1f;
+  --sidebar-ring: #6366f1;
 }
 
 @theme inline {
-  --font-sans: 'Geist', 'Geist Fallback';
-  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --font-sans: 'Inter', 'Inter Fallback', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback', ui-monospace, monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -130,204 +135,72 @@
   body {
     min-height: 100vh;
   }
+  html {
+    background-color: var(--background);
+  }
   body {
-    @apply text-foreground;
-    /* Animated multi-stop gradient base (dark purple → indigo → near-black) */
-    background-color: oklch(0.11 0.03 280);
-    background-image:
-      radial-gradient(ellipse 100% 70% at 0% 0%, oklch(0.22 0.1 290 / 0.85) 0%, transparent 60%),
-      radial-gradient(ellipse 90% 60% at 100% 0%, oklch(0.2 0.12 250 / 0.7) 0%, transparent 60%),
-      radial-gradient(ellipse 100% 80% at 50% 100%, oklch(0.15 0.08 270 / 0.85) 0%, transparent 70%),
-      linear-gradient(135deg, oklch(0.1 0.04 290) 0%, oklch(0.09 0.03 260) 50%, oklch(0.07 0.02 280) 100%);
-    background-attachment: fixed;
-    background-size: 200% 200%, 200% 200%, 200% 200%, 100% 100%;
-    animation: bg-shift 28s ease-in-out infinite;
+    @apply bg-background text-foreground;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Tight, intentional headings. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    letter-spacing: -0.014em;
   }
 }
 
 @layer utilities {
-  /* Headline gradient — violet/indigo/azure, fits the new background */
-  .gradient-text {
-    background: linear-gradient(
-      135deg,
-      oklch(0.85 0.16 295) 0%,
-      oklch(0.78 0.18 270) 40%,
-      oklch(0.78 0.14 220) 100%
-    );
+  /* Subtle blue -> purple gradient.  Use only on key emphasis surfaces. */
+  .accent-gradient {
+    background-image: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  }
+  .accent-gradient-text {
+    background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    background-size: 200% 200%;
-    animation: gradient-shift 8s ease-in-out infinite;
   }
 
-  /* Glass surfaces — translucent so the animated bg shows through */
-  .glass {
-    background: color-mix(in oklch, var(--card) 35%, transparent);
-    backdrop-filter: blur(14px) saturate(140%);
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
-    border: 1px solid color-mix(in oklch, white 8%, transparent);
-  }
-  .glass-card {
-    position: relative;
-    background: color-mix(in oklch, var(--card) 30%, transparent);
-    backdrop-filter: blur(14px) saturate(140%);
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
-    border: 1px solid color-mix(in oklch, white 6%, transparent);
-    transition:
-      transform 0.3s ease,
-      border-color 0.3s ease,
-      box-shadow 0.3s ease,
-      background-color 0.3s ease;
-  }
-  .glass-card:hover {
-    transform: translateY(-2px);
-    border-color: color-mix(in oklch, var(--cyan) 50%, transparent);
-    box-shadow:
-      0 0 0 1px color-mix(in oklch, var(--cyan) 35%, transparent),
-      0 18px 40px -18px color-mix(in oklch, var(--violet) 60%, transparent),
-      0 0 60px -10px color-mix(in oklch, var(--indigo) 40%, transparent);
+  /* Glass surfaces — reserved for overlays only (command palette, sheets). */
+  .glass-overlay {
+    background: color-mix(in oklab, var(--card) 80%, transparent);
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
   }
 
-  /* Subtle grid mask, used by AnimatedBackground */
-  .grid-bg {
-    background-image:
-      linear-gradient(to right, color-mix(in oklch, white 6%, transparent) 1px, transparent 1px),
-      linear-gradient(to bottom, color-mix(in oklch, white 6%, transparent) 1px, transparent 1px);
-    background-size: 56px 56px;
-    mask-image: radial-gradient(ellipse at center, black, transparent 75%);
-    -webkit-mask-image: radial-gradient(ellipse at center, black, transparent 75%);
-  }
-
-  /* Gradient buttons */
-  .btn-gradient {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.625rem 1rem;
-    border-radius: 0.625rem;
-    font-weight: 500;
-    color: oklch(0.98 0 0);
-    background-image: linear-gradient(135deg, var(--violet) 0%, var(--indigo) 50%, var(--azure) 100%);
-    background-size: 200% 200%;
-    background-position: 0% 50%;
-    box-shadow:
-      0 8px 24px -8px color-mix(in oklch, var(--violet) 70%, transparent),
-      inset 0 1px 0 0 color-mix(in oklch, white 18%, transparent);
-    transition:
-      background-position 0.5s ease,
-      transform 0.2s ease,
-      box-shadow 0.3s ease;
-  }
-  .btn-gradient:hover {
-    background-position: 100% 50%;
-    transform: translateY(-1px);
-    box-shadow:
-      0 12px 32px -8px color-mix(in oklch, var(--indigo) 80%, transparent),
-      inset 0 1px 0 0 color-mix(in oklch, white 25%, transparent);
-  }
-  .btn-gradient:active {
-    transform: translateY(0);
-  }
-
-  /* Glow ring for interactive surfaces */
-  .glow-ring {
-    box-shadow:
-      0 0 0 1px color-mix(in oklch, var(--cyan) 25%, transparent),
-      0 0 40px -10px color-mix(in oklch, var(--violet) 50%, transparent);
-  }
-
-  /* Used on hero/feature cards */
-  .glow-card {
-    box-shadow:
-      0 0 0 1px color-mix(in oklch, white 6%, transparent),
-      0 18px 60px -16px color-mix(in oklch, var(--violet) 55%, transparent),
-      0 0 80px -20px color-mix(in oklch, var(--indigo) 45%, transparent);
+  /* Hairline divider used in stat grids. */
+  .divide-border-x > * + * {
+    border-left: 1px solid var(--border);
   }
 }
 
-/* Animated background gradient — slow shift of position */
-@keyframes bg-shift {
-  0%,
+/* Subtle shimmer for skeletons. */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
   100% {
-    background-position:
-      0% 0%,
-      100% 0%,
-      50% 100%,
-      0% 0%;
-  }
-  50% {
-    background-position:
-      20% 30%,
-      80% 30%,
-      50% 70%,
-      0% 0%;
+    background-position: 200% 0;
   }
 }
-
-@keyframes gradient-shift {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-/* Floating blob animations — multiple paths so blobs feel organic */
-@keyframes blob-a {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  33% {
-    transform: translate3d(60px, -40px, 0) scale(1.12);
-  }
-  66% {
-    transform: translate3d(-40px, 50px, 0) scale(0.92);
-  }
-}
-@keyframes blob-b {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  50% {
-    transform: translate3d(-70px, 60px, 0) scale(1.15);
-  }
-}
-@keyframes blob-c {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  40% {
-    transform: translate3d(40px, 80px, 0) scale(1.05);
-  }
-  80% {
-    transform: translate3d(-50px, -30px, 0) scale(0.95);
-  }
-}
-
-.animate-blob-a {
-  animation: blob-a 26s ease-in-out infinite;
-}
-.animate-blob-b {
-  animation: blob-b 34s ease-in-out infinite;
-}
-.animate-blob-c {
-  animation: blob-c 40s ease-in-out infinite;
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in oklab, var(--foreground) 6%, transparent) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body,
-  .animate-blob-a,
-  .animate-blob-b,
-  .animate-blob-c,
-  .gradient-text {
+  .animate-shimmer {
     animation: none !important;
   }
 }

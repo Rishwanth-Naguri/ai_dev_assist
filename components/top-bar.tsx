@@ -1,80 +1,57 @@
 "use client"
 
-import { useEffect } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { Sparkles, Bot, Zap } from "lucide-react"
+import { Search, UserRound } from "lucide-react"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
 import { DashboardBreadcrumb } from "@/components/dashboard-breadcrumb"
-import { Badge } from "@/components/ui/badge"
+import { useCommandPalette } from "@/components/command-palette"
+import { cn } from "@/lib/utils"
 
 export function TopBar() {
-  const router = useRouter()
-
-  // Global Cmd/Ctrl+K shortcut → jump to chat (the "Quick ask" affordance).
-  useEffect(() => {
-    function onKeyDown(e: KeyboardEvent) {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        const target = e.target as HTMLElement | null
-        const tag = target?.tagName?.toLowerCase()
-        // Don't hijack browser find when user is mid-edit in a textarea
-        if (target?.isContentEditable) return
-        if (tag === "input" || tag === "textarea") {
-          // Allow ⌘K from inputs only when not the chat textarea itself
-          const path = typeof window !== "undefined" ? window.location.pathname : ""
-          if (path.startsWith("/chat")) return
-        }
-        e.preventDefault()
-        router.push("/chat")
-      }
-    }
-    window.addEventListener("keydown", onKeyDown)
-    return () => window.removeEventListener("keydown", onKeyDown)
-  }, [router])
+  const { setOpen } = useCommandPalette()
 
   return (
-    <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-2 border-b border-white/5 glass px-3 sm:px-4">
-      <SidebarTrigger className="-ml-1" />
-      <Separator orientation="vertical" className="mr-1 h-4" />
+    <header className="sticky top-0 z-20 flex h-12 shrink-0 items-center gap-3 border-b border-border bg-background/80 px-3 backdrop-blur-md sm:px-4">
+      <SidebarTrigger className="-ml-1 size-7" />
+      <Separator orientation="vertical" className="h-4" />
       <DashboardBreadcrumb />
 
       <div className="ml-auto flex items-center gap-2">
-        <Link
-          href="/chat"
-          className="hidden md:inline-flex items-center gap-2 rounded-lg border border-border bg-card/60 px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
-          title="Quick ask (⌘K)"
+        {/* Command palette trigger — looks like a search field. */}
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className={cn(
+            "group inline-flex h-8 items-center gap-2 rounded-md border border-border bg-card px-2.5 text-xs",
+            "text-muted-foreground transition-colors duration-150",
+            "hover:border-border hover:bg-accent hover:text-foreground",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
+          )}
+          aria-label="Open command palette"
         >
-          <Zap className="size-3.5 text-primary" />
-          <span>Quick ask</span>
-          <kbd className="ml-2 hidden lg:inline-flex items-center gap-0.5 rounded border border-border bg-muted/50 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
-            ⌘K
+          <Search className="size-3.5" />
+          <span className="hidden md:inline">Search or jump to…</span>
+          <span className="inline md:hidden">Search</span>
+          <kbd className="ml-2 hidden items-center gap-0.5 rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground sm:inline-flex">
+            <span className="text-[11px]">⌘</span>K
           </kbd>
-        </Link>
+        </button>
 
-        <Badge
-          variant="outline"
-          className="hidden sm:inline-flex h-7 items-center gap-1.5 rounded-full border-border bg-card/60 px-2.5 font-mono text-[10px] text-muted-foreground"
-        >
-          <Bot className="size-3 text-primary" />
+        <Separator orientation="vertical" className="hidden h-4 sm:block" />
+
+        <span className="hidden items-center gap-1.5 rounded-md border border-border bg-card px-2 py-1 font-mono text-[10px] text-muted-foreground sm:inline-flex">
+          <span className="size-1.5 rounded-full bg-emerald-500" aria-hidden />
           gpt-5-mini
-        </Badge>
-
-        <div className="flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-medium text-emerald-400">
-          <span className="relative flex size-1.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex size-1.5 rounded-full bg-emerald-400" />
-          </span>
-          <span className="hidden sm:inline">Live</span>
-        </div>
+        </span>
 
         <Link
           href="/account"
           aria-label="View GitHub account"
           title="GitHub account"
-          className="ml-1 flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-primary/30 to-primary/10 ring-1 ring-primary/30 transition-all hover:ring-primary/60 hover:from-primary/40 hover:to-primary/20"
+          className="flex size-8 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-colors hover:border-primary/40 hover:bg-accent hover:text-foreground"
         >
-          <Sparkles className="size-3.5 text-primary" />
+          <UserRound className="size-3.5" />
         </Link>
       </div>
     </header>
