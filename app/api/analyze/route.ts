@@ -49,15 +49,15 @@ export async function POST(req: Request) {
       )
     }
 
-    const { experimental_output } = await generateText({
+    const { output } = await generateText({
       model: "openai/gpt-5-mini",
       system:
         "You are a senior MERN-stack code reviewer. Analyze the user's code precisely. Identify real bugs (not stylistic nits), suggest concrete improvements, and rewrite the code with the fixes applied. Be honest — if there are no bugs, return an empty bugs array.",
       prompt: `Analyze the following code and respond with structured output.\n\n\`\`\`\n${code}\n\`\`\``,
-      experimental_output: Output.object({ schema: AnalysisSchema }),
+      output: Output.object({ schema: AnalysisSchema }),
     })
 
-    return Response.json(experimental_output)
+    return Response.json(output)
   } catch (error) {
     console.log("[v0] Analyze route error:", error)
     return new Response(

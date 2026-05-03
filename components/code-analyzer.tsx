@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Code2, Bug, Lightbulb, Copy, Check, Wand2, AlertTriangle } from "lucide-react"
+import { Code2, Bug as BugIcon, Lightbulb, Copy, Check, Wand2, AlertTriangle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -235,7 +235,7 @@ function AnalysisResult({
                 {analysis.bugs.map((bug, i) => (
                   <li key={i} className="rounded-md border border-border bg-muted/30 p-3">
                     <div className="flex items-start gap-2">
-                      <Bug className="mt-0.5 size-4 shrink-0 text-destructive" />
+                      <BugIcon className="mt-0.5 size-4 shrink-0 text-destructive" />
                       <div className="flex-1 space-y-1">
                         <div className="flex flex-wrap items-center gap-2">
                           <p className="text-sm font-medium">{bug.title}</p>

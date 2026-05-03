@@ -53,14 +53,14 @@ export async function POST(req: Request) {
     const tools = await client.tools()
 
     // Let the model orchestrate the real GitHub MCP tools to fetch the data.
-    const { experimental_output, steps } = await generateText({
+    const { output, steps } = await generateText({
       model: "openai/gpt-5-mini",
       tools,
       stopWhen: stepCountIs(8),
       system:
         "You are a tool-using agent. Use the connected GitHub MCP tools to fetch repository metadata and the 5 most recent commits on the default branch. Make as few tool calls as possible. Do not invent any values — only use data returned by the MCP tools. If a field is unavailable, return null (or an empty array).",
       prompt: `Repository: ${owner}/${repo}\n\n1) Fetch the repository's metadata.\n2) Fetch the 5 most recent commits on its default branch.\n3) Return the structured output.`,
-      experimental_output: Output.object({ schema: RepoDataSchema }),
+      output: Output.object({ schema: RepoDataSchema }),
     })
 
     const toolCalls = steps
@@ -68,7 +68,7 @@ export async function POST(req: Request) {
       .map((c) => ({ toolName: c.toolName, input: c.input }))
 
     return Response.json({
-      data: experimental_output,
+      data: output,
       meta: {
         owner,
         repo,
