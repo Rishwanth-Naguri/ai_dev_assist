@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Code2, Bug as BugIcon, Lightbulb, Copy, Check, Wand2, AlertTriangle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Spinner } from "@/components/ui/spinner"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -40,10 +41,10 @@ app.get('/users/:id', (req, res) => {
 })`
 
 const SEVERITY_STYLES: Record<Bug["severity"], string> = {
-  low: "border-border bg-muted text-muted-foreground",
-  medium: "border-amber-500/30 bg-amber-500/10 text-amber-500",
-  high: "border-orange-500/30 bg-orange-500/10 text-orange-500",
-  critical: "border-destructive/40 bg-destructive/10 text-destructive",
+  low: "bg-muted text-muted-foreground border-border",
+  medium: "bg-chart-4/15 text-chart-4 border-chart-4/30",
+  high: "bg-chart-5/15 text-chart-5 border-chart-5/30",
+  critical: "bg-destructive/15 text-destructive border-destructive/40",
 }
 
 export function CodeAnalyzer() {
@@ -86,27 +87,25 @@ export function CodeAnalyzer() {
     if (!analysis?.improvedCode) return
     await navigator.clipboard.writeText(analysis.improvedCode)
     setCopied(true)
-    toast.success("Improved code copied")
+    toast.success("Improved code copied to clipboard")
     setTimeout(() => setCopied(false), 2000)
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 px-6 py-8 lg:px-8 lg:py-10">
+    <div className="mx-auto max-w-6xl space-y-6 p-4 md:p-8">
       <header className="space-y-1">
-        <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Tools</p>
         <h1 className="text-2xl font-semibold tracking-tight">Code Analyzer</h1>
         <p className="text-sm text-muted-foreground">
           Paste JavaScript, TypeScript, or MERN-stack code and get bugs, suggestions, and an improved version.
         </p>
       </header>
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        {/* Input */}
-        <div className="overflow-hidden rounded-lg border border-border bg-card">
-          <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Card className="overflow-hidden border-border bg-card">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 border-b border-border pb-3">
             <div className="flex items-center gap-2">
-              <Code2 className="size-3.5 text-muted-foreground" />
-              <span className="text-sm font-medium">Your code</span>
+              <Code2 className="size-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium">Your Code</CardTitle>
             </div>
             <Button
               variant="ghost"
@@ -117,80 +116,64 @@ export function CodeAnalyzer() {
             >
               Load sample
             </Button>
-          </div>
-          <Textarea
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            placeholder="// Paste your code here…"
-            spellCheck={false}
-            className="min-h-[360px] resize-none rounded-none border-0 bg-transparent px-4 py-3 font-mono text-[12px] leading-relaxed shadow-none focus-visible:ring-0"
-            disabled={loading}
-          />
-          <div className="flex items-center justify-between border-t border-border px-4 py-2.5">
-            <span className="font-mono text-[11px] text-muted-foreground">
-              {code.length.toLocaleString()} chars
-            </span>
-            <Button onClick={analyze} disabled={!code.trim() || loading} size="sm" className="h-8">
-              {loading ? (
-                <>
-                  <Spinner className="size-3.5" />
-                  Analyzing…
-                </>
-              ) : (
-                <>
-                  <Wand2 className="size-3.5" />
-                  Analyze
-                </>
-              )}
-            </Button>
-          </div>
-        </div>
+          </CardHeader>
+          <CardContent className="p-0">
+            <Textarea
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              placeholder="// Paste your code here…"
+              spellCheck={false}
+              className="min-h-[360px] resize-none rounded-none border-0 bg-transparent font-mono text-xs leading-relaxed shadow-none focus-visible:ring-0"
+              disabled={loading}
+            />
+            <div className="flex items-center justify-between border-t border-border px-3 py-2">
+              <span className="text-xs text-muted-foreground">{code.length.toLocaleString()} characters</span>
+              <Button onClick={analyze} disabled={!code.trim() || loading} size="sm">
+                {loading ? (
+                  <>
+                    <Spinner className="size-3.5" />
+                    Analyzing…
+                  </>
+                ) : (
+                  <>
+                    <Wand2 className="size-3.5" />
+                    Analyze Code
+                  </>
+                )}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
 
-        {/* Output */}
-        <div>
+        <div className="space-y-4">
           {loading ? (
             <AnalysisSkeleton />
           ) : error ? (
-            <ErrorState error={error} onRetry={analyze} />
+            <Card className="border-destructive/40 bg-destructive/5">
+              <CardContent className="flex items-start gap-3 p-4">
+                <AlertTriangle className="mt-0.5 size-4 text-destructive" />
+                <div className="space-y-1">
+                  <p className="text-sm font-medium">Analysis failed</p>
+                  <p className="text-xs text-muted-foreground">{error}</p>
+                </div>
+              </CardContent>
+            </Card>
           ) : analysis ? (
             <AnalysisResult analysis={analysis} onCopy={copyImproved} copied={copied} />
           ) : (
-            <EmptyAnalysis />
+            <Card className="border-dashed bg-card/50">
+              <CardContent className="flex min-h-[360px] flex-col items-center justify-center gap-2 text-center">
+                <div className="flex size-10 items-center justify-center rounded-lg bg-muted">
+                  <Wand2 className="size-4 text-muted-foreground" />
+                </div>
+                <p className="text-sm font-medium">No analysis yet</p>
+                <p className="max-w-xs text-xs text-muted-foreground">
+                  Paste your code on the left and click Analyze Code to get bugs, suggestions, and an improved version.
+                </p>
+              </CardContent>
+            </Card>
           )}
         </div>
-      </div>
-    </div>
-  )
-}
-
-function EmptyAnalysis() {
-  return (
-    <div className="flex min-h-[360px] flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-border bg-card/50 p-6 text-center">
-      <div className="flex size-9 items-center justify-center rounded-md border border-border bg-background">
-        <Wand2 className="size-4 text-muted-foreground" />
-      </div>
-      <p className="text-sm font-medium">No analysis yet</p>
-      <p className="max-w-xs text-xs text-muted-foreground leading-relaxed">
-        Paste your code on the left and click Analyze to get bugs, suggestions, and a fixed version.
-      </p>
-    </div>
-  )
-}
-
-function ErrorState({ error, onRetry }: { error: string; onRetry: () => void }) {
-  return (
-    <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-4">
-      <div className="flex items-start gap-3">
-        <AlertTriangle className="mt-0.5 size-4 shrink-0 text-destructive" />
-        <div className="flex-1 space-y-1">
-          <p className="text-sm font-medium">Analysis failed</p>
-          <p className="text-xs text-muted-foreground leading-relaxed">{error}</p>
-        </div>
-      </div>
-      <div className="mt-3 flex justify-end">
-        <Button variant="outline" size="sm" className="h-7 text-xs" onClick={onRetry}>
-          Try again
-        </Button>
       </div>
     </div>
   )
@@ -206,138 +189,128 @@ function AnalysisResult({
   copied: boolean
 }) {
   return (
-    <div className="overflow-hidden rounded-lg border border-border bg-card">
-      <div className="border-b border-border px-4 py-3">
+    <Card className="border-border bg-card animate-in fade-in slide-in-from-bottom-2 duration-300">
+      <CardHeader className="border-b border-border pb-4">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium">Analysis</span>
-          <Badge variant="outline" className="border-border bg-background font-mono text-[10px]">
+          <CardTitle className="text-sm font-medium">Analysis</CardTitle>
+          <Badge variant="secondary" className="font-mono text-[10px]">
             {analysis.language}
           </Badge>
         </div>
-        <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{analysis.summary}</p>
-      </div>
+        <CardDescription className="text-pretty">{analysis.summary}</CardDescription>
+      </CardHeader>
+      <CardContent className="p-0">
+        <Tabs defaultValue="bugs" className="w-full">
+          <TabsList className="grid w-full grid-cols-3 rounded-none border-b border-border bg-transparent p-0">
+            <TabsTrigger value="bugs" className="rounded-none border-r border-border data-[state=active]:bg-muted/40">
+              Bugs
+              {analysis.bugs.length > 0 && (
+                <Badge variant="secondary" className="ml-2 h-5 px-1.5 text-[10px]">
+                  {analysis.bugs.length}
+                </Badge>
+              )}
+            </TabsTrigger>
+            <TabsTrigger value="suggestions" className="rounded-none border-r border-border data-[state=active]:bg-muted/40">
+              Suggestions
+              {analysis.suggestions.length > 0 && (
+                <Badge variant="secondary" className="ml-2 h-5 px-1.5 text-[10px]">
+                  {analysis.suggestions.length}
+                </Badge>
+              )}
+            </TabsTrigger>
+            <TabsTrigger value="improved" className="rounded-none data-[state=active]:bg-muted/40">
+              Improved
+            </TabsTrigger>
+          </TabsList>
 
-      <Tabs defaultValue="bugs" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 rounded-none border-b border-border bg-transparent p-0">
-          <TabsTrigger
-            value="bugs"
-            className="rounded-none border-r border-border data-[state=active]:bg-accent data-[state=active]:shadow-none"
-          >
-            Bugs
-            {analysis.bugs.length > 0 && (
-              <span className="ml-2 rounded-full bg-destructive/10 px-1.5 font-mono text-[10px] text-destructive">
-                {analysis.bugs.length}
-              </span>
-            )}
-          </TabsTrigger>
-          <TabsTrigger
-            value="suggestions"
-            className="rounded-none border-r border-border data-[state=active]:bg-accent data-[state=active]:shadow-none"
-          >
-            Suggestions
-            {analysis.suggestions.length > 0 && (
-              <span className="ml-2 rounded-full bg-primary/10 px-1.5 font-mono text-[10px] text-primary">
-                {analysis.suggestions.length}
-              </span>
-            )}
-          </TabsTrigger>
-          <TabsTrigger
-            value="improved"
-            className="rounded-none data-[state=active]:bg-accent data-[state=active]:shadow-none"
-          >
-            Improved
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="bugs" className="m-0 p-4">
-          {analysis.bugs.length === 0 ? (
-            <div className="flex flex-col items-center justify-center gap-1 py-10 text-center">
-              <Check className="size-4 text-emerald-500" />
-              <p className="text-sm font-medium">No bugs found</p>
-              <p className="text-xs text-muted-foreground">The code looks correct.</p>
-            </div>
-          ) : (
-            <ul className="space-y-2.5">
-              {analysis.bugs.map((bug, i) => (
-                <li key={i} className="rounded-md border border-border bg-background/40 p-3">
-                  <div className="flex items-start gap-2.5">
-                    <BugIcon className="mt-0.5 size-3.5 shrink-0 text-destructive" />
-                    <div className="flex-1 space-y-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <p className="text-sm font-medium">{bug.title}</p>
-                        <span
-                          className={cn(
-                            "rounded-full border px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider",
-                            SEVERITY_STYLES[bug.severity],
-                          )}
-                        >
-                          {bug.severity}
-                        </span>
-                        {bug.line && (
-                          <span className="font-mono text-[10px] text-muted-foreground">
-                            line {bug.line}
+          <TabsContent value="bugs" className="m-0 p-4">
+            {analysis.bugs.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-8 text-center">
+                <Check className="mb-2 size-5 text-primary" />
+                <p className="text-sm font-medium">No bugs found</p>
+                <p className="text-xs text-muted-foreground">The code looks correct.</p>
+              </div>
+            ) : (
+              <ul className="space-y-3">
+                {analysis.bugs.map((bug, i) => (
+                  <li key={i} className="rounded-md border border-border bg-muted/30 p-3">
+                    <div className="flex items-start gap-2">
+                      <BugIcon className="mt-0.5 size-4 shrink-0 text-destructive" />
+                      <div className="flex-1 space-y-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <p className="text-sm font-medium">{bug.title}</p>
+                          <span
+                            className={cn(
+                              "rounded-full border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide",
+                              SEVERITY_STYLES[bug.severity],
+                            )}
+                          >
+                            {bug.severity}
                           </span>
-                        )}
+                          {bug.line ? (
+                            <span className="font-mono text-[10px] text-muted-foreground">line {bug.line}</span>
+                          ) : null}
+                        </div>
+                        <p className="text-xs text-muted-foreground leading-relaxed">{bug.description}</p>
                       </div>
-                      <p className="text-xs text-muted-foreground leading-relaxed">{bug.description}</p>
                     </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </TabsContent>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </TabsContent>
 
-        <TabsContent value="suggestions" className="m-0 p-4">
-          {analysis.suggestions.length === 0 ? (
-            <p className="py-10 text-center text-sm text-muted-foreground">No suggestions.</p>
-          ) : (
-            <ul className="space-y-2.5">
-              {analysis.suggestions.map((s, i) => (
-                <li key={i} className="rounded-md border border-border bg-background/40 p-3">
-                  <div className="flex items-start gap-2.5">
-                    <Lightbulb className="mt-0.5 size-3.5 shrink-0 text-primary" />
-                    <div className="space-y-1">
-                      <p className="text-sm font-medium">{s.title}</p>
-                      <p className="text-xs text-muted-foreground leading-relaxed">{s.description}</p>
+          <TabsContent value="suggestions" className="m-0 p-4">
+            {analysis.suggestions.length === 0 ? (
+              <p className="py-8 text-center text-sm text-muted-foreground">No suggestions.</p>
+            ) : (
+              <ul className="space-y-3">
+                {analysis.suggestions.map((s, i) => (
+                  <li key={i} className="rounded-md border border-border bg-muted/30 p-3">
+                    <div className="flex items-start gap-2">
+                      <Lightbulb className="mt-0.5 size-4 shrink-0 text-primary" />
+                      <div className="space-y-1">
+                        <p className="text-sm font-medium">{s.title}</p>
+                        <p className="text-xs text-muted-foreground leading-relaxed">{s.description}</p>
+                      </div>
                     </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </TabsContent>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </TabsContent>
 
-        <TabsContent value="improved" className="m-0">
-          <div className="flex items-center justify-between border-b border-border px-4 py-2">
-            <span className="text-xs text-muted-foreground">Improved version</span>
-            <Button variant="ghost" size="sm" className="h-7 gap-1.5 text-xs" onClick={onCopy}>
-              {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
-              {copied ? "Copied" : "Copy"}
-            </Button>
-          </div>
-          <pre className="max-h-[440px] overflow-auto p-4 font-mono text-[12px] leading-relaxed">
-            <code>{analysis.improvedCode}</code>
-          </pre>
-        </TabsContent>
-      </Tabs>
-    </div>
+          <TabsContent value="improved" className="m-0">
+            <div className="flex items-center justify-between border-b border-border px-4 py-2">
+              <span className="text-xs text-muted-foreground">Improved version</span>
+              <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={onCopy}>
+                {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+                {copied ? "Copied" : "Copy"}
+              </Button>
+            </div>
+            <pre className="max-h-[440px] overflow-auto p-4 font-mono text-xs leading-relaxed">
+              <code>{analysis.improvedCode}</code>
+            </pre>
+          </TabsContent>
+        </Tabs>
+      </CardContent>
+    </Card>
   )
 }
 
 function AnalysisSkeleton() {
   return (
-    <div className="rounded-lg border border-border bg-card">
-      <div className="space-y-2 border-b border-border px-4 py-3">
-        <Skeleton className="h-3.5 w-20" />
+    <Card className="border-border bg-card">
+      <CardHeader className="space-y-2 border-b border-border pb-4">
+        <Skeleton className="h-4 w-24" />
         <Skeleton className="h-3 w-full" />
         <Skeleton className="h-3 w-3/4" />
-      </div>
-      <div className="space-y-2.5 p-4">
-        <Skeleton className="h-14 w-full" />
-        <Skeleton className="h-14 w-full" />
-        <Skeleton className="h-14 w-full" />
-      </div>
-    </div>
+      </CardHeader>
+      <CardContent className="space-y-3 p-4">
+        <Skeleton className="h-16 w-full" />
+        <Skeleton className="h-16 w-full" />
+        <Skeleton className="h-16 w-full" />
+      </CardContent>
+    </Card>
   )
 }

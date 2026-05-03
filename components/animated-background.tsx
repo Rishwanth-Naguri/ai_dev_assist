@@ -1,77 +1,26 @@
 export function AnimatedBackground() {
   return (
-    <div
-      aria-hidden
-      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
-    >
-      {/* Layered radial base — deep navy/indigo wash so it never reads as flat black. */}
+    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden>
+      {/* Subtle grid */}
+      <div className="absolute inset-0 grid-bg opacity-40" />
+      {/* Cyan glow */}
       <div
-        className="absolute inset-0"
-        style={{
-          background: `
-            radial-gradient(120% 80% at 12% 8%, rgba(76, 29, 149, 0.35), transparent 60%),
-            radial-gradient(110% 90% at 88% 20%, rgba(30, 64, 175, 0.32), transparent 55%),
-            radial-gradient(90% 70% at 50% 100%, rgba(67, 56, 202, 0.28), transparent 60%),
-            linear-gradient(180deg, #0a0612 0%, #07060e 60%, #050409 100%)
-          `,
-        }}
-      />
-
-      {/* Slow-panning gradient sheen on top of the base. */}
-      <div
-        className="absolute inset-0 opacity-60 animate-gradient-pan"
+        className="animate-blob absolute -top-40 -left-32 size-[36rem] rounded-full opacity-30 blur-3xl"
         style={{
           background:
-            "linear-gradient(120deg, transparent 0%, rgba(99, 102, 241, 0.08) 30%, rgba(139, 92, 246, 0.10) 50%, rgba(59, 130, 246, 0.08) 70%, transparent 100%)",
-          backgroundSize: "200% 200%",
+            "radial-gradient(circle at center, oklch(0.78 0.14 195 / 0.55), transparent 70%)",
         }}
       />
-
-      {/* Floating blobs — purple (top-left), blue (bottom-right), violet (center). */}
+      {/* Deep blue glow */}
       <div
-        className="absolute -top-32 -left-24 size-[36rem] rounded-full opacity-50 mix-blend-screen blur-3xl animate-blob-1"
+        className="animate-blob-slow absolute -bottom-40 -right-32 size-[40rem] rounded-full opacity-25 blur-3xl"
         style={{
           background:
-            "radial-gradient(circle at 30% 30%, rgba(168, 85, 247, 0.55), rgba(168, 85, 247, 0) 65%)",
+            "radial-gradient(circle at center, oklch(0.55 0.18 240 / 0.55), transparent 70%)",
         }}
       />
-      <div
-        className="absolute -bottom-40 -right-24 size-[40rem] rounded-full opacity-50 mix-blend-screen blur-3xl animate-blob-2"
-        style={{
-          background:
-            "radial-gradient(circle at 60% 40%, rgba(59, 130, 246, 0.55), rgba(59, 130, 246, 0) 65%)",
-        }}
-      />
-      <div
-        className="absolute top-1/3 left-1/2 size-[28rem] -translate-x-1/2 rounded-full opacity-35 mix-blend-screen blur-3xl animate-blob-3"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(139, 92, 246, 0.45), rgba(139, 92, 246, 0) 70%)",
-        }}
-      />
-
-      {/* Faint grid for depth — masked toward the top so it doesn't fight content. */}
-      <div
-        className="absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)",
-          backgroundSize: "56px 56px",
-          maskImage:
-            "radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 80%)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 80%)",
-        }}
-      />
-
-      {/* Vignette to anchor the corners. */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 100% 70% at 50% 50%, transparent 50%, rgba(0,0,0,0.55) 100%)",
-        }}
-      />
+      {/* Vignette */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/60" />
     </div>
   )
 }
