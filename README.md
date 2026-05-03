@@ -1,35 +1,104 @@
-# v0-ai-developer-assistant
+# 🚀 DevAssist  
+### AI-Powered Developer Workspace with MCP Integration
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [v0](https://v0.app).
+DevAssist is a modern, production-ready AI developer platform that unifies code assistance, debugging, and real-time external data into a single intelligent workspace.
 
-## Built with v0
+Instead of switching between tools like ChatGPT, GitHub, and documentation, DevAssist enables developers to **build, debug, and analyze faster with context-aware AI**.
 
-This repository is linked to a [v0](https://v0.app) project. You can continue developing by visiting the link below -- start new chats to make changes, and v0 will push commits directly to this repo. Every merge to `main` will automatically deploy.
+---
 
-[Continue working on v0 →](https://v0.app/chat/projects/prj_Z7suftFslenz7IPT2oh5dShsjxLs)
+## 🌟 Key Highlights
 
-## Getting Started
+- 🧠 AI + Real-time Data (via MCP)
+- ⚡ Developer-first UX (SaaS-grade UI)
+- 🔐 Secure server-side integrations
+- 🚀 Built for speed, clarity, and productivity
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## ✨ Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 🤖 AI Chat Assistant
+- Context-aware developer Q&A
+- Supports React, Node.js, MongoDB, Express, Next.js
+- Streaming responses (real-time)
+- Clean, modern chat interface
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-## Learn More
+### 🧠 Code Analyzer
+- Detect bugs and anti-patterns
+- Suggest improvements
+- Generate fixed code instantly
+- Structured output:
+  - ❌ Bugs
+  - ⚠️ Warnings
+  - 🚀 Suggestions
+  - 💡 Optimized Code
 
-To learn more, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [v0 Documentation](https://v0.app/docs) - learn about v0 and how to use it.
+### 🔗 MCP Data Viewer (Model Context Protocol)
+- Fetch real-time GitHub repository data
+- No mock data — fully live API integration
 
-<a href="https://v0.app/chat/api/kiro/clone/Rishwanth-Naguri/v0-ai-developer-assistant" alt="Open in Kiro"><img src="https://pdgvvgmkdvyeydso.public.blob.vercel-storage.com/open%20in%20kiro.svg?sanitize=true" /></a>
+Displays:
+- 📦 Repository Name  
+- ⭐ Stars  
+- 🧑‍💻 Language  
+- 🕒 Last Updated  
+
+> Powered by secure server-side GitHub API integration
+
+---
+
+### 🎛️ Unified SaaS Dashboard
+- Sidebar + multi-panel layout
+- Chat + Code Analyzer + MCP tools in one workspace
+- Inspired by Linear / Vercel / Stripe UI systems
+- Clean, minimal, high-performance UX
+
+---
+
+## 🧱 Tech Stack
+
+| Layer        | Technology |
+|-------------|-----------|
+| Frontend    | Next.js (App Router), React |
+| Styling     | Tailwind CSS |
+| AI Layer    | Vercel AI SDK |
+| Backend     | Server Actions / API Routes |
+| Data Layer  | GitHub REST API |
+| Protocol    | MCP (Model Context Protocol) |
+| Deployment  | Vercel |
+
+---
+
+## 🏗️ Architecture Overview
+
+```text
+                ┌───────────────────────────┐
+                │        Frontend UI        │
+                │   (Next.js + Tailwind)   │
+                │                           │
+                │  - Chat Interface         │
+                │  - Code Analyzer          │
+                │  - MCP Dashboard          │
+                └────────────┬──────────────┘
+                             │
+                             ▼
+                ┌───────────────────────────┐
+                │      Backend Layer        │
+                │ (API Routes / Server)     │
+                │                           │
+                │  - AI Processing          │
+                │  - GitHub API Calls       │
+                │  - MCP Integration        │
+                └────────────┬──────────────┘
+                             │
+        ┌────────────────────┼────────────────────┐
+        ▼                    ▼                    ▼
+┌──────────────┐    ┌────────────────┐    ┌────────────────┐
+│  Vercel AI   │    │ GitHub REST API│    │ MCP Server      │
+│   SDK        │    │ (Repo Data)    │    │ (Tools Layer)   │
+└──────────────┘    └────────────────┘    └────────────────┘
