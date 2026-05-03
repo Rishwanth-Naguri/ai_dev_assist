@@ -54,7 +54,10 @@ export function DashboardSidebar() {
   const pathname = usePathname()
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-sidebar-border">
+    <Sidebar
+      collapsible="icon"
+      className="border-r border-white/5 [&_[data-sidebar=sidebar]]:bg-sidebar/50 [&_[data-sidebar=sidebar]]:backdrop-blur-xl"
+    >
       <SidebarHeader className="border-b border-sidebar-border">
         <Link href="/" className="flex items-center gap-2.5 px-2 py-2 transition-opacity hover:opacity-90">
           <div className="relative flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/60 text-primary-foreground shadow-md shadow-primary/20">

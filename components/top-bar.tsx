@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge"
 
 export function TopBar() {
   return (
-    <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-2 border-b border-border/60 glass px-3 sm:px-4">
+    <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-2 border-b border-white/5 glass px-3 sm:px-4">
       <SidebarTrigger className="-ml-1" />
       <Separator orientation="vertical" className="mr-1 h-4" />
       <DashboardBreadcrumb />
