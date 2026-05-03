@@ -50,20 +50,6 @@ export function AnimatedBackground() {
         }}
       />
 
-      {/* Faint grid for depth — masked toward the top so it doesn't fight content. */}
-      <div
-        className="absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)",
-          backgroundSize: "56px 56px",
-          maskImage:
-            "radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 80%)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 80%)",
-        }}
-      />
-
       {/* Vignette to anchor the corners. */}
       <div
         className="absolute inset-0"
