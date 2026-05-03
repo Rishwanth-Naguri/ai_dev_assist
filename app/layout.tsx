@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next"
 import { Inter, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Toaster } from "@/components/ui/sonner"
+import { AnimatedBackground } from "@/components/animated-background"
 import "./globals.css"
 
 const inter = Inter({
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#0a0a0b",
+  themeColor: "#07060e",
   width: "device-width",
   initialScale: 1,
 }
@@ -35,14 +36,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`dark ${inter.variable} ${geistMono.variable}`}>
-      <body className="bg-background font-sans antialiased text-foreground">
-        {children}
+      <body className="font-sans antialiased text-foreground">
+        <AnimatedBackground />
+        <div className="relative isolate min-h-svh">{children}</div>
         <Toaster
           richColors
           position="top-right"
           toastOptions={{
             classNames: {
-              toast: "border border-border bg-card text-foreground",
+              toast: "border border-white/10 bg-card/80 backdrop-blur-md text-foreground",
             },
           }}
         />

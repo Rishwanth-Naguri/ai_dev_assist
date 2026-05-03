@@ -29,7 +29,10 @@ export function DashboardSidebar() {
   const pathname = usePathname()
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-sidebar-border">
+    <Sidebar
+      collapsible="icon"
+      className="border-r border-white/10 [&_[data-sidebar=sidebar]]:bg-[rgba(12,10,24,0.55)] [&_[data-sidebar=sidebar]]:backdrop-blur-xl"
+    >
       <SidebarHeader className="border-b border-sidebar-border px-2 py-3">
         <Link
           href="/"

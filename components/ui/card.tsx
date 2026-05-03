@@ -7,8 +7,9 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card"
       className={cn(
-        // Solid card with a hairline border. No backdrop-blur, no shadow.
-        "flex flex-col rounded-lg border border-border bg-card text-card-foreground",
+        // Translucent glass card so the animated background flows through.
+        "flex flex-col rounded-lg border border-white/10 bg-white/[0.04] text-card-foreground backdrop-blur-xl",
+        "transition-[transform,border-color,box-shadow,background-color] duration-300 ease-out",
         className,
       )}
       {...props}
