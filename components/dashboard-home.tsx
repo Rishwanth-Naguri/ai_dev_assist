@@ -14,8 +14,6 @@ import {
   Users,
   BookOpen,
   Bot,
-  Activity,
-  TrendingUp,
 } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -83,13 +81,19 @@ export function DashboardHome() {
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-6 md:px-8 md:py-10">
       {/* Hero */}
-      <section className="relative overflow-hidden rounded-2xl border border-border/60 glass p-6 md:p-10 glow-card animate-in fade-in slide-in-from-bottom-2 duration-500">
+      <section className="relative overflow-hidden rounded-2xl glass glow-card p-6 md:p-10 animate-in fade-in slide-in-from-bottom-2 duration-500">
         <div
           aria-hidden
-          className="pointer-events-none absolute -top-24 -right-24 size-80 rounded-full opacity-40 blur-3xl"
+          className="pointer-events-none absolute -top-24 -right-24 size-80 rounded-full opacity-50 blur-3xl"
           style={{
-            background:
-              "radial-gradient(circle, oklch(0.78 0.14 195 / 0.35), transparent 70%)",
+            background: "radial-gradient(circle, oklch(0.55 0.24 295 / 0.45), transparent 70%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -bottom-24 -left-24 size-80 rounded-full opacity-40 blur-3xl"
+          style={{
+            background: "radial-gradient(circle, oklch(0.6 0.2 235 / 0.4), transparent 70%)",
           }}
         />
         <div className="relative flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
@@ -110,16 +114,13 @@ export function DashboardHome() {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <Link
-              href="/chat"
-              className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground shadow-md shadow-primary/20 transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/30 active:translate-y-0"
-            >
+            <Link href="/chat" className="btn-gradient text-sm">
               <MessageSquare className="size-4" />
               Start a chat
             </Link>
             <Link
               href="/analyzer"
-              className="inline-flex items-center gap-2 rounded-lg border border-border bg-card/60 px-4 py-2.5 text-sm font-medium text-foreground transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:bg-card active:translate-y-0"
+              className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-foreground backdrop-blur-md transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:bg-white/10 active:translate-y-0"
             >
               <Code2 className="size-4" />
               Analyze code
@@ -163,164 +164,131 @@ export function DashboardHome() {
         />
       </section>
 
-      {/* Main + insights */}
-      <section className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
-        {/* Quick start */}
-        <div className="lg:col-span-2 space-y-4">
-          <SectionHeader
-            title="Quick start"
-            description="Jump straight into a workflow."
-            icon={Sparkles}
-          />
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {QUICK_LINKS.map((link, i) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="group relative flex flex-col gap-3 overflow-hidden rounded-xl border border-border bg-card/70 p-5 shadow-sm backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/10 animate-in fade-in slide-in-from-bottom-2"
-                style={{ animationDelay: `${i * 60}ms` }}
-              >
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                />
-                <div className="flex items-center gap-3">
-                  <div className="flex size-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 text-primary ring-1 ring-primary/20">
-                    <link.icon className="size-5" />
-                  </div>
-                  <h3 className="text-base font-semibold tracking-tight">{link.title}</h3>
+      {/* Quick start */}
+      <section className="mt-6 space-y-4">
+        <SectionHeader title="Quick start" description="Jump straight into a workflow." icon={Sparkles} />
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {QUICK_LINKS.map((link, i) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="group glass-card relative flex flex-col gap-3 overflow-hidden rounded-xl p-5 animate-in fade-in slide-in-from-bottom-2"
+              style={{ animationDelay: `${i * 60}ms` }}
+            >
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              />
+              <div className="flex items-center gap-3">
+                <div className="flex size-10 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500/30 via-indigo-500/20 to-cyan-400/20 text-foreground ring-1 ring-white/10">
+                  <link.icon className="size-5" />
                 </div>
-                <p className="text-sm text-muted-foreground line-clamp-2">{link.description}</p>
-                <div className="mt-auto flex items-center gap-1.5 text-xs font-medium text-primary">
-                  <span>{link.cta}</span>
-                  <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
-                </div>
-              </Link>
-            ))}
-          </div>
+                <h3 className="text-base font-semibold tracking-tight">{link.title}</h3>
+              </div>
+              <p className="text-sm text-muted-foreground line-clamp-2">{link.description}</p>
+              <div className="mt-auto flex items-center gap-1.5 text-xs font-medium text-primary">
+                <span>{link.cta}</span>
+                <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
+              </div>
+            </Link>
+          ))}
         </div>
+      </section>
 
-        {/* Insights rail */}
-        <aside className="space-y-4">
-          <SectionHeader
-            title="Insights"
-            description="Live signals from your workspace."
-            icon={Activity}
-          />
-
-          {/* Profile snapshot */}
-          <Card className="overflow-hidden border-border bg-card/70 backdrop-blur-sm">
-            <div className="flex items-center gap-3 border-b border-border bg-gradient-to-br from-primary/10 to-transparent p-4">
+      {/* Compact profile + MCP strip */}
+      <section className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+        <Card className="overflow-hidden border-white/5">
+          <div className="flex items-center gap-3 border-b border-white/5 bg-gradient-to-br from-violet-500/15 via-indigo-500/10 to-transparent p-4">
+            {userLoading ? (
+              <Skeleton className="size-10 rounded-full" />
+            ) : user?.avatar_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={user.avatar_url || "/placeholder.svg"}
+                alt={user.login ? `@${user.login}` : "GitHub avatar"}
+                className="size-10 rounded-full ring-2 ring-primary/40"
+              />
+            ) : (
+              <div className="flex size-10 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                <UserRound className="size-5" />
+              </div>
+            )}
+            <div className="min-w-0 flex-1">
               {userLoading ? (
-                <Skeleton className="size-10 rounded-full" />
-              ) : user?.avatar_url ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={user.avatar_url || "/placeholder.svg"}
-                  alt={user.login ? `@${user.login}` : "GitHub avatar"}
-                  className="size-10 rounded-full ring-2 ring-primary/30"
-                />
+                <>
+                  <Skeleton className="h-3.5 w-24" />
+                  <Skeleton className="mt-1.5 h-3 w-16" />
+                </>
+              ) : user?.login ? (
+                <>
+                  <p className="truncate text-sm font-medium leading-tight">{user.name || user.login}</p>
+                  <p className="truncate font-mono text-xs text-muted-foreground">@{user.login}</p>
+                </>
               ) : (
-                <div className="flex size-10 items-center justify-center rounded-full bg-muted text-muted-foreground">
-                  <UserRound className="size-5" />
-                </div>
+                <>
+                  <p className="text-sm font-medium leading-tight">Not connected</p>
+                  <p className="text-xs text-muted-foreground">Configure GITHUB_TOKEN</p>
+                </>
               )}
-              <div className="min-w-0 flex-1">
-                {userLoading ? (
-                  <>
-                    <Skeleton className="h-3.5 w-24" />
-                    <Skeleton className="mt-1.5 h-3 w-16" />
-                  </>
-                ) : user?.login ? (
-                  <>
-                    <p className="truncate text-sm font-medium leading-tight">
-                      {user.name || user.login}
-                    </p>
-                    <p className="truncate font-mono text-xs text-muted-foreground">
-                      @{user.login}
-                    </p>
-                  </>
-                ) : (
-                  <>
-                    <p className="text-sm font-medium leading-tight">Not connected</p>
-                    <p className="text-xs text-muted-foreground">Configure GITHUB_TOKEN</p>
-                  </>
-                )}
-              </div>
-              <Link
-                href="/account"
-                className="text-[11px] font-medium text-primary opacity-80 transition-opacity hover:opacity-100"
-              >
-                View
-              </Link>
-            </div>
-            <div className="grid grid-cols-3 gap-px bg-border">
-              <MiniStat icon={BookOpen} label="Repos" value={user?.public_repos} loading={userLoading} />
-              <MiniStat icon={Users} label="Followers" value={user?.followers} loading={userLoading} />
-              <MiniStat icon={Star} label="Gists" value={user?.public_gists} loading={userLoading} />
-            </div>
-          </Card>
-
-          {/* MCP status */}
-          <Card className="border-border bg-card/70 p-4 backdrop-blur-sm">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Github className="size-4 text-muted-foreground" />
-                <span className="text-sm font-medium">MCP Bridge</span>
-              </div>
-              {toolsLoading ? (
-                <Skeleton className="h-5 w-14 rounded-full" />
-              ) : (
-                <span
-                  className={cn(
-                    "inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] font-medium",
-                    tools?.connected
-                      ? "border border-emerald-500/20 bg-emerald-500/10 text-emerald-400"
-                      : "border border-border bg-muted/40 text-muted-foreground",
-                  )}
-                >
-                  <span
-                    className={cn(
-                      "size-1.5 rounded-full",
-                      tools?.connected ? "bg-emerald-400" : "bg-muted-foreground",
-                    )}
-                  />
-                  {tools?.connected ? "Connected" : "Offline"}
-                </span>
-              )}
-            </div>
-            <p className="mt-1 font-mono text-[11px] text-muted-foreground">
-              github-mcp · streamable-http
-            </p>
-            <div className="mt-3 flex items-baseline gap-1.5">
-              {toolsLoading ? (
-                <Skeleton className="h-7 w-10" />
-              ) : (
-                <span className="text-2xl font-semibold tabular-nums">{tools?.count ?? "—"}</span>
-              )}
-              <span className="text-[11px] uppercase tracking-wider text-muted-foreground">live tools</span>
             </div>
             <Link
-              href="/mcp"
-              className="mt-3 inline-flex items-center gap-1 text-[11px] font-medium text-primary hover:underline"
+              href="/account"
+              className="text-[11px] font-medium text-primary opacity-80 transition-opacity hover:opacity-100"
             >
-              Open viewer
-              <ArrowRight className="size-3" />
+              View
             </Link>
-          </Card>
+          </div>
+          <div className="grid grid-cols-3 gap-px bg-white/5">
+            <MiniStat icon={BookOpen} label="Repos" value={user?.public_repos} loading={userLoading} />
+            <MiniStat icon={Users} label="Followers" value={user?.followers} loading={userLoading} />
+            <MiniStat icon={Star} label="Gists" value={user?.public_gists} loading={userLoading} />
+          </div>
+        </Card>
 
-          {/* Tip card */}
-          <Card className="border-border bg-gradient-to-br from-primary/10 via-card/70 to-card/70 p-4 backdrop-blur-sm">
+        <Card className="border-white/5 p-4">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <TrendingUp className="size-4 text-primary" />
-              <span className="text-sm font-medium">Pro tip</span>
+              <Github className="size-4 text-muted-foreground" />
+              <span className="text-sm font-medium">MCP Bridge</span>
             </div>
-            <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
-              Paste any GitHub repo URL into the MCP viewer. Stars, forks, language, license, and the latest 5
-              commits stream back from the official REST API — no scraping, no mocks.
-            </p>
-          </Card>
-        </aside>
+            {toolsLoading ? (
+              <Skeleton className="h-5 w-14 rounded-full" />
+            ) : (
+              <span
+                className={cn(
+                  "inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] font-medium",
+                  tools?.connected
+                    ? "border border-emerald-500/20 bg-emerald-500/10 text-emerald-400"
+                    : "border border-border bg-muted/40 text-muted-foreground",
+                )}
+              >
+                <span
+                  className={cn(
+                    "size-1.5 rounded-full",
+                    tools?.connected ? "bg-emerald-400" : "bg-muted-foreground",
+                  )}
+                />
+                {tools?.connected ? "Connected" : "Offline"}
+              </span>
+            )}
+          </div>
+          <p className="mt-1 font-mono text-[11px] text-muted-foreground">github-mcp · streamable-http</p>
+          <div className="mt-3 flex items-baseline gap-1.5">
+            {toolsLoading ? (
+              <Skeleton className="h-7 w-10" />
+            ) : (
+              <span className="text-2xl font-semibold tabular-nums">{tools?.count ?? "—"}</span>
+            )}
+            <span className="text-[11px] uppercase tracking-wider text-muted-foreground">live tools</span>
+          </div>
+          <Link
+            href="/mcp"
+            className="mt-3 inline-flex items-center gap-1 text-[11px] font-medium text-primary hover:underline"
+          >
+            Open viewer
+            <ArrowRight className="size-3" />
+          </Link>
+        </Card>
       </section>
     </div>
   )
