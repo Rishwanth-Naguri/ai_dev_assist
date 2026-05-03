@@ -7,9 +7,9 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card"
       className={cn(
-        // Flat, Linear-grade card: solid surface, hairline border, no shadow or blur.
-        "flex flex-col rounded-lg border border-border bg-card text-card-foreground",
-        "transition-colors duration-150 ease-out",
+        // Semi-transparent card that lets the animated background show through.
+        "flex flex-col rounded-lg border border-border/80 bg-card/80 backdrop-blur-sm text-card-foreground",
+        "transition-all duration-200 ease-out",
         className,
       )}
       {...props}

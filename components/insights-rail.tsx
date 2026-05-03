@@ -37,7 +37,7 @@ export function InsightsRail() {
   })
 
   return (
-    <aside className="hidden xl:block w-80 shrink-0 border-l border-border bg-background">
+    <aside className="hidden xl:block w-80 shrink-0 border-l border-border/80 bg-background/70 backdrop-blur-md">
       <div className="sticky top-12 flex flex-col gap-4 p-5">
         <RailSection title="Status" icon={Activity}>
           <ul className="space-y-2.5 text-xs">

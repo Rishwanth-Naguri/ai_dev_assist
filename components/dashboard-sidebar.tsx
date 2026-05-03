@@ -29,13 +29,16 @@ export function DashboardSidebar() {
   const pathname = usePathname()
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-sidebar-border">
+    <Sidebar
+      collapsible="icon"
+      className="border-r border-sidebar-border/80 [&_[data-sidebar=sidebar]]:bg-sidebar/90 [&_[data-sidebar=sidebar]]:backdrop-blur-md"
+    >
       <SidebarHeader className="border-b border-sidebar-border px-2 py-3">
         <Link
           href="/"
           className="flex items-center gap-2.5 rounded-md px-1.5 py-1 transition-colors hover:bg-sidebar-accent"
         >
-          <div className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
+          <div className="flex size-7 items-center justify-center rounded-md accent-gradient text-white shadow-sm shadow-primary/20">
             <Code className="size-3.5" strokeWidth={2.5} />
           </div>
           <div className="flex flex-col leading-tight group-data-[collapsible=icon]:hidden">
