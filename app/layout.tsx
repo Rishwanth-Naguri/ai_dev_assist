@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next"
 import { Inter, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Toaster } from "@/components/ui/sonner"
-import { AnimatedBackground } from "@/components/animated-background"
 import "./globals.css"
 
 const inter = Inter({
@@ -24,7 +23,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#07060e",
+  themeColor: "#0a0a0b",
   width: "device-width",
   initialScale: 1,
 }
@@ -35,19 +34,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`dark ${inter.variable} ${geistMono.variable}`}>
-      <body className="font-sans antialiased text-foreground">
-        <AnimatedBackground />
-        <div className="relative isolate min-h-svh">{children}</div>
-        <Toaster
-          richColors
-          position="top-right"
-          toastOptions={{
-            classNames: {
-              toast: "border border-white/10 bg-card/80 backdrop-blur-md text-foreground",
-            },
-          }}
-        />
+    <html lang="en" className={`dark ${inter.variable} ${geistMono.variable} bg-background`}>
+      <body className="font-sans antialiased bg-background text-foreground">
+        {children}
+        <Toaster richColors position="top-right" />
         {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>
