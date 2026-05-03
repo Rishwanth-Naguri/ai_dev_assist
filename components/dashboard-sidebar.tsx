@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { MessageSquare, Code2, Github, Sparkles, Activity, UserRound } from "lucide-react"
+import { MessageSquare, Code2, Github, Sparkles, Activity, UserRound, LayoutDashboard } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -18,6 +18,12 @@ import {
 import { cn } from "@/lib/utils"
 
 const navItems = [
+  {
+    title: "Dashboard",
+    href: "/",
+    icon: LayoutDashboard,
+    description: "Overview & insights",
+  },
   {
     title: "Chat",
     href: "/chat",
@@ -50,15 +56,16 @@ export function DashboardSidebar() {
   return (
     <Sidebar collapsible="icon" className="border-r border-sidebar-border">
       <SidebarHeader className="border-b border-sidebar-border">
-        <div className="flex items-center gap-2 px-2 py-2">
-          <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
+        <Link href="/" className="flex items-center gap-2.5 px-2 py-2 transition-opacity hover:opacity-90">
+          <div className="relative flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/60 text-primary-foreground shadow-md shadow-primary/20">
             <Sparkles className="size-4" />
+            <span className="absolute inset-0 rounded-lg ring-1 ring-inset ring-white/10" aria-hidden />
           </div>
           <div className="flex flex-col leading-tight group-data-[collapsible=icon]:hidden">
             <span className="text-sm font-semibold tracking-tight">DevAssist</span>
-            <span className="text-xs text-muted-foreground">AI + MCP Dashboard</span>
+            <span className="text-[10px] uppercase tracking-wider text-muted-foreground">AI · MCP · GitHub</span>
           </div>
-        </div>
+        </Link>
       </SidebarHeader>
 
       <SidebarContent>
@@ -67,7 +74,10 @@ export function DashboardSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map((item) => {
-                const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
+                const isActive =
+                  item.href === "/"
+                    ? pathname === "/"
+                    : pathname === item.href || pathname.startsWith(item.href + "/")
                 return (
                   <SidebarMenuItem key={item.href}>
                     <SidebarMenuButton
