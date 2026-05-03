@@ -11,7 +11,6 @@ import {
   ExternalLink,
   Wrench,
   Plug,
-  Activity,
   Search,
   AlertTriangle,
   GitCommit,
@@ -31,6 +30,7 @@ import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 
 type RepoData = {
+  name: string
   fullName: string
   description: string | null
   htmlUrl: string
@@ -43,6 +43,7 @@ type RepoData = {
   topics: string[]
   license: string | null
   pushedAt: string | null
+  updatedAt: string | null
   recentCommits: {
     sha: string
     message: string
@@ -50,18 +51,6 @@ type RepoData = {
     date: string
     url: string
   }[]
-}
-
-type ToolCall = { toolName: string; input: unknown }
-
-type RepoResponse = {
-  data: RepoData
-  meta: {
-    owner: string
-    repo: string
-    toolCalls: ToolCall[]
-    steps: number
-  }
 }
 
 type ToolsResponse = {
@@ -79,7 +68,7 @@ const EXAMPLES = ["vercel/next.js", "facebook/react", "expressjs/express", "mong
 
 export function MCPViewer() {
   const [input, setInput] = useState("")
-  const [result, setResult] = useState<RepoResponse | null>(null)
+  const [result, setResult] = useState<RepoData | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -95,7 +84,7 @@ export function MCPViewer() {
     setResult(null)
 
     try {
-      const res = await fetch("/api/mcp/repo", {
+      const res = await fetch("/api/github-repo", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ input: target }),
@@ -106,10 +95,10 @@ export function MCPViewer() {
         throw new Error(err.error || `Request failed with ${res.status}`)
       }
 
-      const data: RepoResponse = await res.json()
+      const data: RepoData = await res.json()
       setResult(data)
     } catch (e) {
-      const msg = e instanceof Error ? e.message : "MCP request failed"
+      const msg = e instanceof Error ? e.message : "GitHub API request failed"
       setError(msg)
       toast.error(msg)
     } finally {
@@ -125,7 +114,9 @@ export function MCPViewer() {
           <ConnectionBadge tools={toolsData} loading={toolsLoading} />
         </div>
         <p className="text-sm text-muted-foreground text-pretty">
-          Live connection to the official{" "}
+          Repository data is fetched live from the GitHub REST API on the server using a secure{" "}
+          <code className="rounded bg-muted px-1 font-mono text-xs">GITHUB_TOKEN</code>. The connection badge shows the
+          live{" "}
           <a
             href="https://github.com/github/github-mcp-server"
             target="_blank"
@@ -134,7 +125,7 @@ export function MCPViewer() {
           >
             GitHub MCP server
           </a>{" "}
-          via Streamable HTTP. The model below uses real MCP tools — no mocks.
+          tool list — no mocks anywhere.
         </p>
       </header>
 
@@ -217,7 +208,7 @@ export function MCPViewer() {
             </Card>
           )}
 
-          {result && !loading && <RepoCard result={result} />}
+          {result && !loading && <RepoCard data={result} />}
         </div>
 
         <ToolsPanel tools={toolsData} loading={toolsLoading} />
@@ -254,8 +245,7 @@ function ConnectionBadge({ tools, loading }: { tools: ToolsResponse | undefined;
   )
 }
 
-function RepoCard({ result }: { result: RepoResponse }) {
-  const { data, meta } = result
+function RepoCard({ data }: { data: RepoData }) {
   return (
     <Card className="overflow-hidden border-border bg-card animate-in fade-in slide-in-from-bottom-2 duration-300">
       <CardHeader className="border-b border-border bg-muted/20">
@@ -309,17 +299,20 @@ function RepoCard({ result }: { result: RepoResponse }) {
           value={data.license || "—"}
         />
       </CardContent>
-      {data.pushedAt && (
-        <div className="flex items-center gap-2 border-t border-border bg-muted/10 px-5 py-2 text-[11px] text-muted-foreground">
-          <Clock className="size-3" />
-          Last push{" "}
-          {new Date(data.pushedAt).toLocaleString(undefined, {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
+      {(data.pushedAt || data.updatedAt) && (
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-border bg-muted/10 px-5 py-2 text-[11px] text-muted-foreground">
+          {data.pushedAt && (
+            <span className="flex items-center gap-1.5">
+              <GitCommit className="size-3" />
+              Last push <time dateTime={data.pushedAt}>{formatDateTime(data.pushedAt)}</time>
+            </span>
+          )}
+          {data.updatedAt && (
+            <span className="flex items-center gap-1.5">
+              <Clock className="size-3" />
+              Last updated <time dateTime={data.updatedAt}>{formatDateTime(data.updatedAt)}</time>
+            </span>
+          )}
         </div>
       )}
 
@@ -339,7 +332,7 @@ function RepoCard({ result }: { result: RepoResponse }) {
         </div>
 
         {data.recentCommits.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No commits returned by MCP.</p>
+          <p className="text-sm text-muted-foreground">No commits returned by the GitHub API.</p>
         ) : (
           <ul className="space-y-2">
             {data.recentCommits.map((c) => (
@@ -359,14 +352,8 @@ function RepoCard({ result }: { result: RepoResponse }) {
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm">{c.message}</p>
                   <p className="text-xs text-muted-foreground">
-                    {c.author} ·{" "}
-                    {new Date(c.date).toLocaleString(undefined, {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
+                    {c.author}
+                    {c.date ? ` · ${formatDateTime(c.date)}` : ""}
                   </p>
                 </div>
                 <ExternalLink className="size-3.5 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
@@ -376,29 +363,18 @@ function RepoCard({ result }: { result: RepoResponse }) {
         )}
       </div>
 
-      {meta.toolCalls.length > 0 && (
-        <>
-          <Separator />
-          <div className="bg-muted/10 px-5 py-3">
-            <p className="mb-2 flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-              <Activity className="size-3" />
-              MCP tool calls ({meta.steps} steps)
-            </p>
-            <div className="flex flex-wrap gap-1.5">
-              {meta.toolCalls.map((tc, i) => (
-                <span
-                  key={i}
-                  className="rounded border border-border bg-background px-2 py-0.5 font-mono text-[10px] text-muted-foreground"
-                >
-                  {tc.toolName}
-                </span>
-              ))}
-            </div>
-          </div>
-        </>
-      )}
     </Card>
   )
+}
+
+function formatDateTime(iso: string) {
+  return new Date(iso).toLocaleString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  })
 }
 
 function Stat({
